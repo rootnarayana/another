@@ -19,10 +19,10 @@ def http_trigger1(req: func.HttpRequest,outputDocument: func.Out[func.Document])
 
     if not name or not date or not operation:
         return func.HttpResponse("Missing name, date, or operation field.", status_code=400)
-
-    if operation == 'add':
+    
+    if operation == 'add': 
         logging.info(f"Adding item: {name} - {date}")
-        outputDocument.set(func.Document.from_dict({"id": name}))
+        outputDocument.set(func.Document.from_dict({"name": name}))
 
         return func.HttpResponse(f"Item '{name} - {date}' added successfully.", status_code=200)
 
