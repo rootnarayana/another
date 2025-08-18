@@ -5,7 +5,7 @@ app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
 
 @app.route(route="http_trigger1")
 @app.cosmos_db_output(arg_name="outputDocument", database_name="venkat1", container_name="venkatcon1", connection="CosmosDBConnectionString")
-def http_trigger1(req: func.HttpRequest) -> func.HttpResponse:
+def http_trigger1(req: func.HttpRequest,outputDocument: func.Out[func.Document]) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
 
     try:
