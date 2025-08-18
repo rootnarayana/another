@@ -22,8 +22,14 @@ def http_trigger1(req: func.HttpRequest,outputDocument: func.Out[func.Document])
 
     if operation == 'add': 
         logging.info(f"Adding item: {name} - {date}")
-        outputDocument.set(func.Document.from_dict({"id": name}))
-
+        outputDocument.set(
+            func.Document.from_dict({
+                "id": name,         # unique ID
+                "name": name,       # partition key value
+                "date": date,
+                "operation": operation
+            })
+        )
         return func.HttpResponse(f"Item '{name} - {date}' added successfully.", status_code=200)
 
     elif operation == 'remove':
