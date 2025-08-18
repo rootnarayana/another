@@ -25,7 +25,7 @@ def http_trigger1(req: func.HttpRequest,outputDocument: func.Out[func.Document])
         outputDocument.set(
             func.Document.from_dict({
                 "id": name,         # unique ID
-                "name": name,       # partition key value
+                "venkatconkey": name,       # partition key value
                 "date": date,
                 "operation": operation
             })
