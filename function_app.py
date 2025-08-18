@@ -6,7 +6,7 @@ app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
 @app.route(route="http_trigger1")
 # @app.queue_output(arg_name="msg", queue_name="outqueue", connection="AzureWebJobsStorage")
 @app.cosmos_db_output(arg_name="outputDocument", database_name="tryvenkatstorage", container_name="venkat1", connection="CosmosDBConnectionString")
-def test_function(req: func.HttpRequest,outputDocument: func.Out[func.Document]) -> func.HttpResponse:
+def test_function(req: func.HttpRequest, msg: func.Out[func.QueueMessage],outputDocument: func.Out[func.Document]) -> func.HttpResponse:
 # def http_trigger1(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
 
