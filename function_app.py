@@ -28,6 +28,15 @@ def http_trigger1(req: func.HttpRequest, outputDocument: func.Out[func.Document]
 
     if operation == 'add': 
         logging.info(f"Adding item: {name} - {date}")
+        logging.info(f'{outputDocument.set(
+            func.Document.from_dict({
+                "id": str(uuid.uuid4()),   # unique ID
+                "venkatconkey": name,      # must match your partition key!
+                "name": name,
+                "date": date,
+                "operation": operation
+            })
+        )}')
         outputDocument.set(
             func.Document.from_dict({
                 "id": str(uuid.uuid4()),   # unique ID
