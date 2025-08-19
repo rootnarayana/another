@@ -5,15 +5,15 @@ import uuid
 app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
 
 @app.route(route="http_trigger1")
-@app.cosmos_db_output(
-    arg_name="outputDocument",
-    database_name="venkat1",
-    container_name="venkatcon1",
-    connection="connectionstring"
-)
-def http_trigger1(req: func.HttpRequest, outputDocument: func.Out[func.Document]) -> func.HttpResponse:
+# @app.cosmos_db_output(
+#     arg_name="outputDocument",
+#     database_name="venkat1",
+#     container_name="venkatcon1",
+#     connection="connectionstring"
+# )outputDocument: func.Out[func.Document]
+@app.queue_output(arg_name="msg", queue_name="queueven", connection="AzureWebJobsStorage")
+def http_trigger1(req: func.HttpRequest, msg: func.Out [func.QueueMessage]) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
-
     try:
         req_body = req.get_json()
     except ValueError:
@@ -27,25 +27,9 @@ def http_trigger1(req: func.HttpRequest, outputDocument: func.Out[func.Document]
         return func.HttpResponse("Missing name, date, or operation field.", status_code=400)
 
     if operation == 'add': 
+        msg.set(name)
         logging.info(f"Adding item: {name} - {date}")
-        logging.info(f'{outputDocument.set(
-            func.Document.from_dict({
-                "id": str(uuid.uuid4()),   # unique ID
-                "venkatconkey": name,      # must match your partition key!
-                "name": name,
-                "date": date,
-                "operation": operation
-            })
-        )}')
-        outputDocument.set(
-            func.Document.from_dict({
-                "id": str(uuid.uuid4()),   # unique ID
-                "venkatconkey": name,      # must match your partition key!
-                "name": name,
-                "date": date,
-                "operation": operation
-            })
-        )
+
         return func.HttpResponse(f"Item '{name} - {date}' added successfully.", status_code=200)
 
     elif operation == 'remove':
